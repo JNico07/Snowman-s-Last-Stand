@@ -13,6 +13,9 @@ public class SnowmanControler : MonoBehaviour
     [SerializeField] GameObject letterButton;
     [SerializeField] TextAsset possibleWord;
 
+    public Image healthBar;
+    public float healthAmount = 100f;
+
     private string word;
     private int incorrectGuesses, correctGuesses;
 
@@ -20,6 +23,17 @@ public class SnowmanControler : MonoBehaviour
     {
         InitialiseButtons();
         InitialiseGame();
+    }
+    void Update() {
+        if(healthAmount <= 0) {
+            Application.LoadLevel(Application.loadedLevel);
+        }
+        if(Input.GetKeyDown(KeyCode.Return)) {
+            TakeDamage(10);
+        }
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            Heal(5);
+        }
     }
 
     private void InitialiseButtons() {
@@ -112,7 +126,8 @@ public class SnowmanControler : MonoBehaviour
             for (int i = 0; i < word.Length; i++) {
                 wordContainer.GetComponentsInChildren<TextMeshProUGUI>()[i].color = Color.green;
             }
-            Invoke("InitialiseGame", 3f); // call a function, after specific time delay: Invoke(function, time-delay)
+            Heal(5f);
+            Invoke("InitialiseGame", 1f); // call a function, after specific time delay: Invoke(function, time-delay)
         }
 
         if (incorrectGuesses == snowmanStages.Length) { // LOSE
@@ -120,7 +135,19 @@ public class SnowmanControler : MonoBehaviour
                 wordContainer.GetComponentsInChildren<TextMeshProUGUI>()[i].color = Color.red;
                 wordContainer.GetComponentsInChildren<TextMeshProUGUI>()[i].text = word[i].ToString();
             }
-            Invoke("InitialiseGame", 3f);
+            TakeDamage(10f);
+            Invoke("InitialiseGame", 1f);
         }
+    }
+
+    public void TakeDamage(float damage) {
+        healthAmount -= damage;
+        healthBar.fillAmount = healthAmount / 100f;
+    }
+    public void Heal(float healingAmount) {
+        healthAmount += healingAmount;
+        healthAmount = Mathf.Clamp(healthAmount, 0, 100);
+
+        healthBar.fillAmount = healthAmount / 100f;
     }
 }
