@@ -126,7 +126,7 @@ public class SnowmanControler : MonoBehaviour
             for (int i = 0; i < word.Length; i++) {
                 wordContainer.GetComponentsInChildren<TextMeshProUGUI>()[i].color = Color.green;
             }
-            Heal(5f);
+            TakeDamage(10f);
             Invoke("InitialiseGame", 1f); // call a function, after specific time delay: Invoke(function, time-delay)
         }
 
@@ -135,7 +135,7 @@ public class SnowmanControler : MonoBehaviour
                 wordContainer.GetComponentsInChildren<TextMeshProUGUI>()[i].color = Color.red;
                 wordContainer.GetComponentsInChildren<TextMeshProUGUI>()[i].text = word[i].ToString();
             }
-            TakeDamage(10f);
+            Heal(5f);
             Invoke("InitialiseGame", 1f);
         }
     }
